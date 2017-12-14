@@ -158,14 +158,21 @@ class Database {
 	 * @access private
 	 */
 	public function connect($type = "readwrite") {
-		$conf = $this->config->getConnectionConfig($type);
+        $conf = $this->config->getConnectionConfig($type);
+
+        $port = 3306;
+
+        if(strstr(':', $conf['host'])) {
+            list($conf['host'], $port) = explode(':', $conf['host']);
+        }
 
 		$params = [
 			'dbname' => $conf['database'],
 			'user' => $conf['user'],
 			'password' => $conf['password'],
-			'host' => $conf['host'],
-			'charset' => 'utf8',
+            'host' => $conf['host'],
+            'port' => $port,
+			'charset' => $conf['encoding'],
 			'driver' => 'pdo_mysql',
 		];
 
